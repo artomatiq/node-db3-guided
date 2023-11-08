@@ -8,19 +8,24 @@ module.exports = {
   remove
 }
 
-function findPosts(user_id) {
-  /*
-    Implement so it resolves this structure:
+async function findPosts(user_id) {
 
-    [
-      {
-          "post_id": 10,
-          "contents": "Trusting everyone is...",
-          "username": "seneca"
-      },
-      etc
-    ]
-  */
+  const posts = await db('users as u')
+    .select('p.id as post_id', 'p.contents', 'u.username')
+    .join('posts as p', 'u.id', '=', 'p.user_id')
+    .where('u.id', user_id)
+    
+  return posts
+  /*
+
+  select 
+    username,
+    p.id,
+    p.contents
+from users as u
+join posts as p
+    on u.id = p.user_id
+where username like 'socrates'
 }
 
 function find() {
