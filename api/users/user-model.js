@@ -66,8 +66,19 @@ group by username
   */
 }
 
-function findById(id) {
-  return db('users').where({ id }).first()
+async function findById(id) {
+  const user = await db('users').where({ id }).first()
+  const posts = await findPosts(id)
+
+  const result = {
+    user_id: user.id,
+    username: user.username,
+    posts: posts
+  }
+
+  return result
+
+  // const posts = findPosts(id)
   /*
     Improve so it resolves this structure:
 
