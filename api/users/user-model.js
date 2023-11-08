@@ -26,12 +26,29 @@ from users as u
 join posts as p
     on u.id = p.user_id
 where username like 'socrates'
+*/
 }
 
-function find() {
-  return db('users')
+async function find() { 
+  const users = await db('users as u')
+    .leftJoin('posts as p', 'p.user_id', 'u.id')
+    .count('p.contents as post_count') 
+    //translates to "collapse all u.usernames 
+    //(if grouping exists, then into each group, 
+    //then insert a column with the counts of u.username"
+    .groupBy('u.username')
+    .select('u.username', 'u.id as user_id',)
+  return users
   /*
-    Improve so it resolves this structure:
+  select 
+    username,
+    u.id,
+    count(username as post_count)
+from users as u
+left join posts as p
+    on u.id = p.user_id
+group by username
+
 
     [
         {
